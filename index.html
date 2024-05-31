@@ -3,47 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duplicate Link Remover</title>
+    <title>Display JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .json-display {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre;
+            max-height: 500px;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Duplicate Link Remover</h1>
-    <input type="file" id="fileInput" accept=".txt">
-    <button onclick="processFile()">Remove Duplicates</button>
-    <pre id="output"></pre>
+    <h1>Display JSON</h1>
+    <div class="json-display" id="json-container">
+        <!-- JSON content will be inserted here -->
+    </div>
 
     <script>
-        function processFile() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+        // URL of the raw text file on GitHub
+        const url = 'https://raw.githubusercontent.com/VampXDH/Proxy/main/proxy.txt';
 
-            if (!file) {
-                alert('Please select a file first.');
-                return;
+        // Function to fetch the raw text file and convert it to JSON format
+        async function fetchAndDisplayJSON() {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const lines = text.split('\n');
+                
+                const jsonObject = {};
+                lines.forEach((line, index) => {
+                    if (line.trim()) { // Avoid adding empty lines
+                        jsonObject[`value${index + 1}`] = line.trim();
+                    }
+                });
+
+                document.getElementById('json-container').textContent = JSON.stringify(jsonObject, null, 2);
+            } catch (error) {
+                console.error('Error fetching or parsing the text file:', error);
+                document.getElementById('json-container').textContent = 'Error fetching or parsing the text file.';
             }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const content = event.target.result;
-                const lines = content.split('\n').map(line => line.trim()).filter(line => line);
-                const uniqueLines = [...new Set(lines)];
-                const output = uniqueLines.join('\n');
-
-                // Display the result
-                document.getElementById('output').textContent = output;
-
-                // Optionally, you can download the result as a file
-                const blob = new Blob([output], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'unique_links.txt';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            };
-
-            reader.readAsText(file);
         }
+
+        // Fetch and display JSON on page load
+        fetchAndDisplayJSON();
     </script>
 </body>
 </html>
