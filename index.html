@@ -3,73 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Proxy JSON</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #000;
-            color: #fff;
-        }
-        .json-display {
-            background-color: #000;
-            border: 1px solid #333;
-            padding: 20px;
-            border-radius: 5px;
-            white-space: pre;
-            overflow: auto;
-            color: #fff;
-        }
-    </style>
+    <title>Alamat IP Proxy</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('https://raw.githubusercontent.com/VampXDH/Proxy/main/proxy.txt')
+                .then(response => response.text())
+                .then(data => {
+                    document.body.innerText = data;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
 </head>
 <body>
-    <div class="json-display" id="json-container">
-        <!-- JSON content will be inserted here -->
-    </div>
-
-    <script>
-        // URL of the webpage to scrape
-        const url = 'https://vampxdw.github.io/Proxy/';
-
-        // Function to fetch the webpage content and convert it to JSON format
-        async function fetchAndDisplayJSON() {
-            try {
-                const response = await fetch(url);
-                const htmlText = await response.text();
-                
-                // Parse the HTML text
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
-                
-                // Find the content in the <pre> tag
-                const preTag = doc.querySelector('pre');
-                
-                if (preTag) {
-                    // Get the text content from the <pre> tag
-                    const proxyText = preTag.textContent.trim();
-                    const lines = proxyText.split('\n');
-                    
-                    // Convert the text content to JSON format
-                    const jsonObject = {};
-                    lines.forEach((line, index) => {
-                        if (line.trim()) { // Avoid adding empty lines
-                            jsonObject[`proxy${index + 1}`] = line.trim();
-                        }
-                    });
-
-                    // Display the JSON content
-                    document.getElementById('json-container').textContent = JSON.stringify(jsonObject, null, 2);
-                } else {
-                    document.getElementById('json-container').textContent = 'No <pre> tag found in the page.';
-                }
-            } catch (error) {
-                console.error('Error fetching or parsing the webpage:', error);
-                document.getElementById('json-container').textContent = 'Error fetching or parsing the webpage.';
-            }
-        }
-
-        // Fetch and display JSON on page load
-        fetchAndDisplayJSON();
-    </script>
 </body>
 </html>
