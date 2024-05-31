@@ -3,56 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display JSON</title>
+    <title>Display Proxy List</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: monospace;
             margin: 20px;
+            background-color: #000;
+            color: #fff;
         }
-        .json-display {
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            padding: 10px;
+        .proxy-display {
+            background-color: #000;
+            border: 1px solid #333;
+            padding: 20px;
             border-radius: 5px;
             white-space: pre;
-            max-height: 500px;
             overflow: auto;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <h1>Display JSON</h1>
-    <div class="json-display" id="json-container">
-        <!-- JSON content will be inserted here -->
+    <div class="proxy-display" id="proxy-container">
+        <!-- Proxy list will be inserted here -->
     </div>
 
     <script>
         // URL of the raw text file on GitHub
         const url = 'https://raw.githubusercontent.com/VampXDH/Proxy/main/proxy.txt';
 
-        // Function to fetch the raw text file and convert it to JSON format
-        async function fetchAndDisplayJSON() {
+        // Function to fetch the raw text file and display its content
+        async function fetchAndDisplayProxies() {
             try {
                 const response = await fetch(url);
                 const text = await response.text();
-                const lines = text.split('\n');
-                
-                const jsonObject = {};
-                lines.forEach((line, index) => {
-                    if (line.trim()) { // Avoid adding empty lines
-                        jsonObject[`value${index + 1}`] = line.trim();
-                    }
-                });
-
-                document.getElementById('json-container').textContent = JSON.stringify(jsonObject, null, 2);
+                document.getElementById('proxy-container').textContent = text.trim();
             } catch (error) {
                 console.error('Error fetching or parsing the text file:', error);
-                document.getElementById('json-container').textContent = 'Error fetching or parsing the text file.';
+                document.getElementById('proxy-container').textContent = 'Error fetching or parsing the text file.';
             }
         }
 
-        // Fetch and display JSON on page load
-        fetchAndDisplayJSON();
+        // Fetch and display the proxy list on page load
+        fetchAndDisplayProxies();
     </script>
 </body>
 </html>
