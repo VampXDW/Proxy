@@ -9,12 +9,13 @@
             fetch('https://raw.githubusercontent.com/VampXDH/Proxy/main/proxy.txt')
                 .then(response => response.text())
                 .then(data => {
-                    document.body.innerText = data;
+                    document.getElementById('proxyIP').innerText = data;
                 })
                 .catch(error => console.error('Error:', error));
         });
     </script>
 </head>
 <body>
+    <div id="proxyIP"></div>
 </body>
 </html>
